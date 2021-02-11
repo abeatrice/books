@@ -15,11 +15,4 @@ class PageTest extends TestCase
     {
         $this->get('/')->assertStatus(302)->assertSee('Redirecting to /books');
     }
-
-    /** @test */
-    public function guest_redirects_to_login()
-    {
-        $url = env('APP_URL');
-        $this->get('/books')->assertStatus(302)->assertSee("Redirecting to ${url}/login");
-    }
 }

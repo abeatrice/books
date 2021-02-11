@@ -17,7 +17,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = auth()->user()->books()->orderBy('sort_order', 'desc')->paginate(10);
+        $books = auth()->user()->books()->orderBy('sort_order')->paginate(10);
 
         return Inertia::render('Resources/Books', compact('books'));
     }
@@ -88,17 +88,19 @@ class BookController extends Controller
     */
     public function changeSortOrder(Book $book, $direction)
     {
-        $highestBook = Book::where('sort_order', Book::max('sort_order'))->first();
-        if($direction == 'up' and $book == $highestBook) {
-            return back();
-        }
-
+        //ignore request to move max book up
         $lowestBook = Book::where('sort_order', Book::min('sort_order'))->first();
-        if($direction == 'down' and $book == $lowestBook) {
+        if($direction == 'up' and $book == $lowestBook) {
+            return back();
+        }
+        
+        //ignore request to move last book down
+        $highestBook = Book::where('sort_order', Book::max('sort_order'))->first();
+        if($direction == 'down' and $book == $highestBook) {
             return back();
         }
 
-        if($direction == 'up') {
+        if($direction == 'down') {
             Book::where('sort_order', $book->sort_order + 1)->decrement('sort_order');
             $book->increment('sort_order');
         } else {
@@ -118,6 +120,10 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         $book->delete();
+
+        //update sort order for remaining books
+        Book::where('sort_order', '>', $book->sort_order)->decrement('sort_order');
+
         return back();
     }
 }

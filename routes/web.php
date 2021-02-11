@@ -9,4 +9,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resources([
         'books' => BookController::class,
     ]);
+    Route::post('/books/{book}/sort_order/{direction}', [BookController::class, 'changeSortOrder'])->name('books.changeSortOrder');
 });

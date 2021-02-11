@@ -12,6 +12,7 @@
 
             <ab-table>
                 <template #thead>
+                    <ab-th>Read Order</ab-th>
                     <ab-th>Title</ab-th>
                     <ab-th>Author</ab-th>
                     <ab-th>Published</ab-th>
@@ -19,6 +20,11 @@
                 </template>
                 <template #tbody>
                     <tr v-for="(book, i) in books.data" :key="i">
+                        <ab-td>
+                            <ab-edit-button @click.native="showUpdate(book)">
+                                {{book.sort_order}}
+                            </ab-edit-button>
+                        </ab-td>
                         <ab-td>
                             <ab-edit-button @click.native="showUpdate(book)">
                                 {{book.title}}
@@ -35,6 +41,8 @@
                             </ab-edit-button>
                         </ab-td>
                         <ab-td class="text-right">
+                            <ab-direction-button direction='up' @click.native="changeSortOrder(book, 'up')" />
+                            <ab-direction-button direction='down' @click.native="changeSortOrder(book, 'down')" />
                             <ab-delete-button @click.native="confirmDeletion(book)" />
                         </ab-td>
                     </tr>
@@ -151,6 +159,7 @@
     import AbTh from './../../Ab/Th'
     import AbTd from './../../Ab/Td'
     import AbDeleteButton from './../../Ab/DeleteButton'
+    import AbDirectionButton from './../../Ab/DirectionButton'
     import AbEditButton from './../../Ab/EditButton'
     import JetLabel from './../../Jetstream/Label'
     import JetInput from './../../Jetstream/Input'
@@ -162,7 +171,6 @@
     import JetDangerButton from './../../Jetstream/DangerButton'
     import Pagination from './../../Ab/Pagination'
 
-
     export default {
         components: {
             AppLayout,
@@ -171,6 +179,7 @@
             AbTh,
             AbTd,
             AbDeleteButton,
+            AbDirectionButton,
             AbEditButton,
             JetLabel,
             JetInput,
@@ -211,6 +220,7 @@
                 }),
 
                 deleteBookForm: this.$inertia.form(),
+                BookSortOrderForm: this.$inertia.form(),
             }
         },
 
@@ -232,6 +242,10 @@
             updateBook() {
                 this.updateForm.put(route('books.update', this.updateForm.id))
                 .then(() => this.updating = this.updateForm.hasErrors())
+            },
+
+            changeSortOrder(book, direction) {
+                this.BookSortOrderForm.post(route('books.changeSortOrder', {book: book.id, direction: direction}))
             },
 
             confirmDeletion(book) {

@@ -28,9 +28,10 @@ class BookFactory extends Factory
      */
     public function definition()
     {
+        static $order = 1;
         return [
             'user_id' => User::factory(),
-            'sort_order' => Book::max('sort_order') + 1,
+            'sort_order' => $order++,
             'title' => $this->title(),
             'author' => $this->faker->name,
             'published_on' => $this->faker->date,
