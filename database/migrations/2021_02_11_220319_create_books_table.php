@@ -16,6 +16,7 @@ class CreateBooksTable extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
+            $table->bigInteger('sort_order')->unsigned();
             $table->string('title');
             $table->string('author');
             $table->date('published_on');

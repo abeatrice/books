@@ -17,9 +17,9 @@ class BookController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Resources/Books', [
-            'books' => auth()->user()->books()->paginate(10)
-        ]);
+        $books = auth()->user()->books()->orderBy('sort_order', 'desc')->paginate(10);
+
+        return Inertia::render('Resources/Books', compact('books'));
     }
 
     /**
@@ -42,6 +42,7 @@ class BookController extends Controller
 
         $book = Book::create([
             'user_id' => auth()->user()->id,
+            'sort_order' => Book::max('sort_order') + 1 ,
             'title' => $request->title,
             'author' => $request->author,
             'published_on' => (new Carbon($request->published_on))->format('Y-m-d'),
@@ -74,6 +75,36 @@ class BookController extends Controller
             'author' => $request->author,
             'published_on' => (new Carbon($request->published_on))->format('Y-m-d'),
         ]);
+
+        return back();
+    }
+
+    /** 
+     * Change sort order of a post with the one above or below it 
+     * 
+     * @param  \App\Book  $book
+     * @param  string  $direction
+     * @return \Illuminate\Http\Response
+    */
+    public function changeSortOrder(Book $book, $direction)
+    {
+        $highestBook = Book::where('sort_order', Book::max('sort_order'))->first();
+        if($direction == 'up' and $book == $highestBook) {
+            return back();
+        }
+
+        $lowestBook = Book::where('sort_order', Book::min('sort_order'))->first();
+        if($direction == 'down' and $book == $lowestBook) {
+            return back();
+        }
+
+        if($direction == 'up') {
+            Book::where('sort_order', $book->sort_order + 1)->decrement('sort_order');
+            $book->increment('sort_order');
+        } else {
+            Book::where('sort_order', $book->sort_order - 1)->increment('sort_order');
+            $book->decrement('sort_order');
+        }
 
         return back();
     }

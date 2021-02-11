@@ -17,7 +17,7 @@
         <!-- Icon -->
         <link rel="icon" href="favicon.ico">
 
-        <title>{{ config('app.name', 'Andrew Beatrice') }}</title>
+        <title>{{ config('app.name', 'Books') }}</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">

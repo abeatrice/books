@@ -48,7 +48,7 @@
             </div>
         </form>
 
-        <div class="mt-2 text-center text-sm tracking-tight text-gray-900">
+        <div class="mt-2 text-center text-sm tracking-tight text-gray-500">
             <span class="block">Email: john@example.com</span>
             <span class="block">Password: password</span>
         </div>
