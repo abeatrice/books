@@ -49,16 +49,16 @@ class BookTest extends TestCase
         $this->get('books')->assertSee($attributes['title']);
     }
 
-    // /** @test */
+    /** @test */
     public function user_can_delete_book()
     {
-        $this->actingAs(User::factory()->create());
-        
-        $book = Book::factory()->create();
+        $user = User::factory()->has(Book::factory())->create();
+        $book = $user->books()->select(['title','author'])->first();
+        dd($book);
 
         $this->assertDatabaseHas('books', $book->toArray());
-        $this->delete($book->path());
-        $this->assertDatabaseMissing('books', $book->toArray());
+        // $this->delete($book->path());
+        // $this->assertDatabaseMissing('books', $book->toArray());
     }
 
     // /** @test */
