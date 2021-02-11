@@ -32,10 +32,10 @@ class BookTest extends TestCase
     /** @test */
     public function user_can_update_book()
     {
-        $this->actingAs(User::factory()->create());
-
-        //TODO attach book to user
-        $book = Book::factory()->create();
+        $user = User::factory()->has(Book::factory())->create();
+        $book = $user->books()->first();
+        
+        $this->actingAs($user);
 
         $attributes = [
             'title' => $this->faker->sentence,
@@ -46,7 +46,7 @@ class BookTest extends TestCase
         $this->put($book->path(), $attributes);
         $this->assertDatabaseHas('books', $attributes);
 
-        // $this->get('books')->assertSee($attributes['title']);
+        $this->get('books')->assertSee($attributes['title']);
     }
 
     // /** @test */
