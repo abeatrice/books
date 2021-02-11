@@ -50,11 +50,8 @@
 
                                     <div class="border-t border-gray-100"></div>
                                     <div class="block px-4 py-2 text-xs text-gray-400">
-                                        User
-                                    </div>
-                                    <jet-dropdown-link :href="route('profile.index')">
                                         Profile
-                                    </jet-dropdown-link>
+                                    </div>
                                     <form @submit.prevent="logout">
                                         <jet-dropdown-link as="button">
                                             Logout

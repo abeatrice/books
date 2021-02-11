@@ -18,7 +18,7 @@
                     <ab-th></ab-th>
                 </template>
                 <template #tbody>
-                    <tr v-for="(book, i) in books" :key="i">
+                    <tr v-for="(book, i) in books.data" :key="i">
                         <ab-td>
                             <ab-edit-button @click.native="showUpdate(book)">
                                 {{book.title}}
@@ -40,10 +40,11 @@
                     </tr>
                 </template>
             </ab-table>
+            <pagination :links="books.links" />
         </div>
 
         <!-- Create Modal -->
-        <jet-dialog-modal :show="creating" maxWidth="3xl" @close="creating = false">
+        <jet-dialog-modal :show="creating" maxWidth="sm" @close="creating = false">
             <template #title>Create Book</template>
 
             <template #content>
@@ -58,7 +59,7 @@
                         <jet-input id="author" type="text" class="mt-1 block w-full" v-model="createForm.author" />
                         <jet-input-error :message="createForm.error('author')" class="mt-2" />
                     </div>
-                    <div class="flex justify-between mb-4">
+                    <div class="flex justify-center mb-4">
                         <div>
                             <div class="flex justify-between mb-1">
                                 <jet-label class="flex-1 self-center" for="published_on" value="Published" />
@@ -83,7 +84,7 @@
         </jet-dialog-modal>
 
         <!-- Update Modal -->
-        <jet-dialog-modal :show="updating" maxWidth="3xl" @close="updating = false">
+        <jet-dialog-modal :show="updating" maxWidth="sm" @close="updating = false">
             <template #title>Update Book</template>
 
             <template #content>
@@ -98,7 +99,7 @@
                         <jet-input id="author" type="text" class="mt-1 block w-full" v-model="updateForm.author" />
                         <jet-input-error :message="updateForm.error('author')" class="mt-2" />
                     </div>
-                    <div class="flex justify-between mb-4">
+                    <div class="flex justify-center mb-4">
                         <div>
                             <div class="flex justify-between mb-1">
                                 <jet-label class="flex-1 self-center" for="published_on" value="Published" />
@@ -159,6 +160,8 @@
     import JetButton from './../../Jetstream/Button'
     import JetSecondaryButton from './../../Jetstream/SecondaryButton'
     import JetDangerButton from './../../Jetstream/DangerButton'
+    import Pagination from './../../Ab/Pagination'
+
 
     export default {
         components: {
@@ -177,6 +180,7 @@
             JetButton,
             JetSecondaryButton,
             JetDangerButton,
+            Pagination,
         },
 
         props: ['books'],
@@ -212,18 +216,16 @@
 
         methods: {
             createBook() {
-                this.createForm.started_on = this.createForm.started_on ? new Date(this.createForm.started_on).toDateString() : null
+                this.createForm.published_on = this.createForm.published_on ? new Date(this.createForm.published_on).toDateString() : null
                 this.createForm.post(route('books.store'))
                 .then(() => this.creating = this.createForm.hasErrors())
             },
 
             showUpdate(book) {
                 this.updateForm.id = book.id
-                this.updateForm.company = book.company
                 this.updateForm.title = book.title
-                this.updateForm.started_on = new Date(book.started_on + 'T00:00:00').toDateString()
-                this.updateForm.ended_on = book.ended_on ? new Date(book.ended_on + 'T00:00:00').toDateString() : null
-                this.updateForm.bullet_points = (Object.keys(book.bullet_points).length > 0) ? book.bullet_points : [{content: ''}]
+                this.updateForm.author = book.author
+                this.updateForm.published_on = new Date(book.published_on + 'T00:00:00').toDateString()
                 this.updating = true
             },
 

@@ -18,7 +18,7 @@ class BookController extends Controller
     public function index()
     {
         return Inertia::render('Resources/Books', [
-            'books' => Book::all()
+            'books' => auth()->user()->books()->paginate(10)
         ]);
     }
 
@@ -31,84 +31,49 @@ class BookController extends Controller
     public function store(Request $request)
     {
         Validator::make([
-            'company' => $request->company,
             'title' => $request->title,
-            'started_on' => $request->started_on,
+            'author' => $request->author,
+            'published_on' => $request->published_on,
         ], [
-            'company' => ['required', 'string', 'max:100'],
             'title' => ['required', 'string', 'max:100'],
-            'started_on' => ['required', 'date'],
+            'author' => ['required', 'string', 'max:100'],
+            'published_on' => ['required', 'date'],
         ])->validateWithBag('createBag');
 
-        $experience = Experience::create([
-            'company' => $request->company,
+        $book = Book::create([
+            'user_id' => auth()->user()->id,
             'title' => $request->title,
-            'started_on' => (new Carbon($request->started_on))->format('Y-m-d'),
-            'ended_on' => !is_null($request->ended_on) ? (new Carbon($request->ended_on))->format('Y-m-d') : null,
+            'author' => $request->author,
+            'published_on' => (new Carbon($request->published_on))->format('Y-m-d'),
         ]);
 
-        $bullet_points = collect($request->bullet_points)->where('content', '!=', null);
-        foreach ($bullet_points as $index => $bullet_point) {
-            $experience->bulletPoints()->save(
-                new BulletPoint([
-                    'order' => $index,
-                    'content' => $bullet_point['content'],
-                ])
-            );
-        }
-
-        return back()->with('flash', [
-            'experience' => $experience
-        ]);
+        return back()->with('flash', ['book' => $book]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Experience  $experience
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Experience $experience)
+    public function update(Request $request, Book $book)
     {
         Validator::make([
-            'company' => $request->company,
             'title' => $request->title,
-            'started_on' => $request->started_on,
+            'author' => $request->author,
+            'published_on' => $request->published_on,
         ], [
-            'company' => ['required', 'string', 'max:100'],
             'title' => ['required', 'string', 'max:100'],
-            'started_on' => ['required', 'date'],
+            'author' => ['required', 'string', 'max:100'],
+            'published_on' => ['required', 'date'],
         ])->validateWithBag('updateBag');
 
-        $experience->update([
-            'company' => $request->company,
+        $book->update([
             'title' => $request->title,
-            'started_on' => (new Carbon($request->started_on))->format('Y-m-d'),
-            'ended_on' => !is_null($request->ended_on) ? (new Carbon($request->ended_on))->format('Y-m-d') : null,
+            'author' => $request->author,
+            'published_on' => (new Carbon($request->published_on))->format('Y-m-d'),
         ]);
-
-        //delete current bullet points not in the request
-        $currentBulletPoints = collect($experience->bulletPoints()->pluck('id'));
-        $bulletPointsInRequest = collect($request->bullet_points)->where('id', '!=', null)->pluck('id')->toArray();
-        BulletPoint::whereIn('id', $currentBulletPoints->diff($bulletPointsInRequest))->delete();
-
-        //update or create bullet points in the request
-        $bullet_points = collect($request->bullet_points)->where('content', '!=', null);
-        foreach($bullet_points as $bullet_point) {
-            if(!empty($bullet_point['id'])) {
-                BulletPoint::find($bullet_point['id'])->update([
-                    'content' => $bullet_point['content']
-                ]);
-            } else {
-                $experience->bulletPoints()->save(
-                    new BulletPoint([
-                        'order' => BulletPoint::max('order') + 1,
-                        'content' => $bullet_point['content'],
-                    ])
-                );
-            }
-        }
 
         return back();
     }
@@ -116,13 +81,12 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Experience  $experience
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Experience $experience)
+    public function destroy(Book $book)
     {
-        $experience->bulletPoints()->delete();
-        $experience->delete();
+        $book->delete();
         return back();
     }
 }

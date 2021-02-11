@@ -1,9 +1,10 @@
 <x-guest-layout>
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <h1 class="text-center text-xl tracking-tight font-extrabold text-gray-900 sm:text-2xl md:text-3xl">
+            <h1 class="text-center text-xl tracking-tight  text-gray-900 sm:text-2xl md:text-3xl">
                 <x-jet-authentication-card-logo />
-                <span class="block text-indigo-600 xl:inline">Book Track</span>
+                <span class="block text-indigo-500 font-extrabold -mb-2">Books</span>
+                <span class="block text-sm text-red-500 font-medium mt-0">hominem unius libri timeo</span>
             </h1>
         </x-slot>
         <x-jet-validation-errors class="mb-4" />
@@ -46,5 +47,10 @@
                 </x-jet-button>
             </div>
         </form>
+
+        <div class="mt-2 text-center text-sm tracking-tight text-gray-900">
+            <span class="block">Email: john@example.com</span>
+            <span class="block">Password: password</span>
+        </div>
     </x-jet-authentication-card>
 </x-guest-layout>
