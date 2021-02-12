@@ -10,12 +10,24 @@ A user can also get a list of details for a book by clicking the book on the lis
 This application makes use of [laravel sail](https://laravel.com/docs/8.x/sail#installation) docker environment for development
 
 ```sh
+# install source
 $ git clone https://github.com/abeatrice/books.git
 $ cd books
+# create the .env file
 $ cp .env.example .env
-
+# install php dependencies
+$ composer install
+# start the docker environment
+$ ./vendor/bin/sail up -d
+# generate the application key
+$ ./vendor/bin/sail art key:generate
+# migrate the database - create tables and seed with data
+$ ./vendor/bin/sail art migrate:fresh --seed
+# install js dependencies
+$ ./vendor/bin/sail npm install
+$ ./vendor/bin/sail npm run dev
+# visit http://localhost
 ```
-
 
 ## Public Api
 
