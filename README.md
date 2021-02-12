@@ -17,7 +17,7 @@ $ cd books
 $ cp .env.example .env
 # install php dependencies
 $ composer install
-# start the docker environment
+# start docker dev containers
 $ ./vendor/bin/sail up -d
 # generate the application key
 $ ./vendor/bin/sail art key:generate
@@ -27,6 +27,9 @@ $ ./vendor/bin/sail art migrate:fresh --seed
 $ ./vendor/bin/sail npm install
 $ ./vendor/bin/sail npm run dev
 # visit http://localhost
+
+# stop docker dev containers
+$ ./vendor/bin/sail down
 ```
 
 ## Public Api
