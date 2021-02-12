@@ -5,6 +5,18 @@ A user can add, update, or remove books from their list.
 A user can also sort the list of books by column or change the read order.
 A user can also get a list of details for a book by clicking the book on the list (same as updating the book).
 
+## local development
+
+This application makes use of [laravel sail](https://laravel.com/docs/8.x/sail#installation) docker environment for development
+
+```sh
+$ git clone https://github.com/abeatrice/books.git
+$ cd books
+$ cp .env.example .env
+
+```
+
+
 ## Public Api
 
 The application can be accessed via REST API
