@@ -15,9 +15,12 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $books = auth()->user()->books()->orderBy('sort_order')->paginate(10);
+        $sortOrder = $request->sort_order ? $request->sort_order : 'sort_order';
+        $sortDirection = $request->sort_direction ? $request->sort_direction : 'desc';
+
+        $books = auth()->user()->books()->orderBy($sortOrder, $sortDirection)->paginate(10);
 
         return Inertia::render('Resources/Books', compact('books'));
     }

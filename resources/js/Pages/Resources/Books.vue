@@ -12,10 +12,10 @@
 
             <ab-table>
                 <template #thead>
-                    <ab-th>Read Order</ab-th>
-                    <ab-th>Title</ab-th>
-                    <ab-th>Author</ab-th>
-                    <ab-th>Published</ab-th>
+                    <ab-th><ab-sort-button :direction="sort_on == 'sort_order' ? sort_direction : 'unsorted'" @click.native="toggleSort('sort_order')">Read Order</ab-sort-button></ab-th>
+                    <ab-th><ab-sort-button :direction="sort_on == 'title' ? sort_direction : 'unsorted'" @click.native="toggleSort('title')">Title</ab-sort-button></ab-th>
+                    <ab-th><ab-sort-button :direction="sort_on == 'author' ? sort_direction : 'unsorted'" @click.native="toggleSort('author')">Author</ab-sort-button></ab-th>
+                    <ab-th><ab-sort-button :direction="sort_on == 'published_on' ? sort_direction : 'unsorted'" @click.native="toggleSort('published_on')">Published</ab-sort-button></ab-th>
                     <ab-th></ab-th>
                 </template>
                 <template #tbody>
@@ -153,6 +153,7 @@
 </template>
 
 <script>
+    import { Inertia } from '@inertiajs/inertia'
     import AppLayout from './../../Layouts/AppLayout'
     import Datepicker from 'vuejs-datepicker'
     import AbTable from './../../Ab/Table'
@@ -160,6 +161,7 @@
     import AbTd from './../../Ab/Td'
     import AbDeleteButton from './../../Ab/DeleteButton'
     import AbDirectionButton from './../../Ab/DirectionButton'
+    import AbSortButton from './../../Ab/SortButton'
     import AbEditButton from './../../Ab/EditButton'
     import JetLabel from './../../Jetstream/Label'
     import JetInput from './../../Jetstream/Input'
@@ -180,6 +182,7 @@
             AbTd,
             AbDeleteButton,
             AbDirectionButton,
+            AbSortButton,
             AbEditButton,
             JetLabel,
             JetInput,
@@ -199,6 +202,9 @@
                 creating: false,
                 updating: false,
                 deleting: null,
+
+                sort_on: 'sort_order',
+                sort_direction: 'desc',
 
                 createForm: this.$inertia.form({
                     title: '',
@@ -246,6 +252,23 @@
 
             changeSortOrder(book, direction) {
                 this.BookSortOrderForm.post(route('books.changeSortOrder', {book: book.id, direction: direction}))
+            },
+
+            toggleSort(field) {
+                if (this.sort_on === field) {
+                    if(this.sort_direction === 'desc') {
+                        this.sort_direction = 'asc'
+                    } else {
+                        this.sort_direction = 'desc'
+                    }
+                } else {
+                    this.sort_on = field
+                }
+
+                Inertia.reload({
+                    data: {sort_on: this.sort_on, sort_direction: this.sort_direction},
+                    replace: true
+                })
             },
 
             confirmDeletion(book) {
