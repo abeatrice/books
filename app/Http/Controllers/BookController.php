@@ -18,7 +18,7 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $sortOrder = $request->sort_order ? $request->sort_order : 'sort_order';
-        $sortDirection = $request->sort_direction ? $request->sort_direction : 'desc';
+        $sortDirection = $request->sort_direction ? $request->sort_direction : 'asc';
 
         $books = auth()->user()->books()->orderBy($sortOrder, $sortDirection)->paginate(10);
 
