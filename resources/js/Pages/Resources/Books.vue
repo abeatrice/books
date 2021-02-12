@@ -9,7 +9,6 @@
                     Create
                 </jet-button>
             </div>
-
             <ab-table>
                 <template #thead>
                     <ab-th><ab-sort-button :direction="sort_on == 'sort_order' ? sort_direction : 'unsorted'" @click.native="toggleSort('sort_order')">Read Order</ab-sort-button></ab-th>
@@ -19,24 +18,24 @@
                     <ab-th></ab-th>
                 </template>
                 <template #tbody>
-                    <tr v-for="(book, i) in books.data" :key="i">
-                        <ab-td>
-                            <ab-edit-button @click.native="showUpdate(book)">
+                    <tr class="bg-white hover:bg-gray-100 cursor-pointer" v-for="(book, i) in books.data" :key="i">
+                        <ab-td @click.native="showUpdate(book)">
+                            <ab-edit-button>
                                 {{book.sort_order}}
                             </ab-edit-button>
                         </ab-td>
-                        <ab-td>
-                            <ab-edit-button @click.native="showUpdate(book)">
+                        <ab-td @click.native="showUpdate(book)">
+                            <ab-edit-button>
                                 {{book.title}}
                             </ab-edit-button>
                         </ab-td>
-                        <ab-td>
-                            <ab-edit-button @click.native="showUpdate(book)">
+                        <ab-td @click.native="showUpdate(book)">
+                            <ab-edit-button>
                                 {{book.author}}
                             </ab-edit-button>
                         </ab-td>                        
-                        <ab-td>
-                            <ab-edit-button @click.native="showUpdate(book)">
+                        <ab-td @click.native="showUpdate(book)">
+                            <ab-edit-button>
                                 {{book.published_on}}
                             </ab-edit-button>
                         </ab-td>
@@ -195,7 +194,7 @@
             Pagination,
         },
 
-        props: ['books'],
+        props: ['books', 'sort_on', 'sort_direction'],
 
         data() {
             return {
@@ -203,8 +202,8 @@
                 updating: false,
                 deleting: null,
 
-                sort_on: 'sort_order',
-                sort_direction: 'desc',
+                // sort_on: 'sort_order',
+                // sort_direction: 'DESC',
 
                 createForm: this.$inertia.form({
                     title: '',
@@ -256,19 +255,16 @@
 
             toggleSort(field) {
                 if (this.sort_on === field) {
-                    if(this.sort_direction === 'desc') {
-                        this.sort_direction = 'asc'
+                    if(this.sort_direction === 'DESC') {
+                        this.sort_direction = 'ASC'
                     } else {
-                        this.sort_direction = 'desc'
+                        this.sort_direction = 'DESC'
                     }
                 } else {
                     this.sort_on = field
                 }
 
-                Inertia.reload({
-                    data: {sort_on: this.sort_on, sort_direction: this.sort_direction},
-                    replace: true
-                })
+                Inertia.visit('/books', { data: {sort_on: this.sort_on, sort_direction: this.sort_direction} })
             },
 
             confirmDeletion(book) {

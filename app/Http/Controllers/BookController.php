@@ -17,12 +17,16 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-        $sortOrder = $request->sort_order ? $request->sort_order : 'sort_order';
-        $sortDirection = $request->sort_direction ? $request->sort_direction : 'asc';
+        $sort_on = $request->sort_on ? $request->sort_on : 'sort_order';
+        $sort_direction = $request->sort_direction ? $request->sort_direction : 'ASC';
 
-        $books = auth()->user()->books()->orderBy($sortOrder, $sortDirection)->paginate(10);
+        $books = auth()->user()->books()->orderBy($sort_on, $sort_direction)->paginate(10);
 
-        return Inertia::render('Resources/Books', compact('books'));
+        return Inertia::render('Resources/Books', [
+            'books' => $books,
+            'sort_on' => $sort_on,
+            'sort_direction' => $sort_direction
+        ]);
     }
 
     /**
@@ -43,14 +47,15 @@ class BookController extends Controller
             'published_on' => ['required', 'date'],
         ])->validateWithBag('createBag');
 
+        Book::where('sort_order', '>=', '1')->increment('sort_order');
         $book = Book::create([
             'user_id' => auth()->user()->id,
-            'sort_order' => Book::max('sort_order') + 1 ,
+            'sort_order' => 1,
             'title' => $request->title,
             'author' => $request->author,
             'published_on' => (new Carbon($request->published_on))->format('Y-m-d'),
         ]);
-
+        
         return back()->with('flash', ['book' => $book]);
     }
 
