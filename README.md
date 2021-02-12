@@ -33,16 +33,14 @@ Use the login method to set the collection cookies for session and csrf tokens
 
 ## Web Application
 
-The web application makes use of laravel jetstream and ignition for a modern monolith for Vue front-end SPA
-[Jetstream](https://jetstream.laravel.com/2.x/introduction.html)
+The web application makes use of [laravel jetstream](https://jetstream.laravel.com/2.x/introduction.html) and [inertia](https://inertiajs.com/) for a Modern Monolith Vue front-end SPA
 
 ## Tests
 
-Tests are avilable for the book resource
+Tests are avilable for the book resource in the test directory
 ```sh
 $ ./vessel test
 ```
 
 ## Deployment
 
- - Deploy it on the cloud - be prepared to describe your process on deployment
