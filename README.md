@@ -1,12 +1,48 @@
 # Books
 
-## Task
- - Connect to a publically available API
- - Create Postman collection 
- - Create Vue app OR Laravel App - 
- - Add or remove items from the list - 
- - Change the order of the items in the list - 
- - Sort the list of items - 
- - Display a detail page with at least 3 points of data to display - 
- - Include unit tests - 
+This is a basic SaaS application for a user to login and keep track of books to read.
+A user can add, update, or remove books from their list.
+A user can also sort the list of books by column or change the read order.
+A user can also get a list of details for a book by clicking the book on the list (same as updating the book).
+
+## Public Api
+
+The application can be accessed via REST API
+
+| Verb      | Endpoint                              | Description                       | Middleware    | Parameters                |
+|:--------- |:------------------------------------- |:--------------------------------- |:------------- |:--------------------------|
+| GET       | /api/books                            | get list of auth users books      | auth:sanctum  | ?sort_on=title            |
+|           |                                       |                                   |               | ?sort_direction=DESC      |
+| GET       | /api/books/{bookId}                   | get a single book                 | auth:sanctum  |                           |
+| POST      | /api/books                            | create a book                     | auth:sanctum  | title=new book            |
+|           |                                       |                                   |               | author=new author         |
+|           |                                       |                                   |               | published_on=2021-01-01   |
+| PUT       | /api/books/{bookId}                   | update a book                     | auth:sanctum  | title=new book            |
+|           |                                       |                                   |               | author=new author         |
+|           |                                       |                                   |               | published_on=2021-01-01   |
+| DELETE    | /api/books/{bookId}                   | delete a single book              | auth:sanctum  |                           |
+
+## Postman Collection
+
+Please use the attached postman collection `books.postman_collection.json` in the root of the project directory to interact with the REST API.
+The postman collection makes use of a pre-request script and collection variables to interact with laravel sanctum authentication.
+The collection variable {{host}} should be updated if the application is not running on http://localhost or running on a different port.
+Use the login method to set the collection cookies for session and csrf tokens
+
+[Postman Import](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-data-into-postman)
+
+## Web Application
+
+The web application makes use of laravel jetstream and ignition for a modern monolith for Vue front-end SPA
+[Jetstream](https://jetstream.laravel.com/2.x/introduction.html)
+
+## Tests
+
+Tests are avilable for the book resource
+```sh
+$ ./vessel test
+```
+
+## Deployment
+
  - Deploy it on the cloud - be prepared to describe your process on deployment
