@@ -5,6 +5,29 @@ A user can add, update, or remove books from their list.
 A user can also sort the list of books by column or change the read order.
 A user can also get a list of details for a book by clicking the book on the list (same as updating the book).
 
+## Deployment
+
+https://books.andrew-demos.com/
+
+This application is deployed to aws lambda with [Bref](https://bref.sh/docs/frameworks/laravel.html) and [serverless](https://www.serverless.com/)
+
+*note that the Bref 8.0 runtime is experimental, the connected database is very small, and there will be cold starts as the lambda function will not be used frequently.*
+
+```sh
+# require bref php lambda runtime
+$ composer require bref/bref bref/laravel-bridge
+# publish serverless config
+$ php artisan vendor:publish --tag=serverless-config
+# install php dependencies for production and clear cash
+$ composer install --prefer-dist --optimize-autoloader --no-dev
+$ php artisan config:cache
+$ php artisan config:clear
+# make changes to serverless.yml file
+$ npm run production
+# deploy
+$ serverless deploy
+```
+
 ## local development
 
 This application makes use of [laravel sail](https://laravel.com/docs/8.x/sail#installation) docker environment for development
@@ -27,6 +50,9 @@ $ ./vendor/bin/sail art migrate:fresh --seed
 $ ./vendor/bin/sail npm install
 $ ./vendor/bin/sail npm run dev
 # visit http://localhost
+
+# run tests
+$ ./vendor/bin/sail test
 
 # stop docker dev containers
 $ ./vendor/bin/sail down
@@ -68,6 +94,4 @@ Tests are avilable for the book resource in the test directory
 ```sh
 $ ./vessel test
 ```
-
-## Deployment
 

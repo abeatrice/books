@@ -1,0 +1,29 @@
+service: books
+provider:
+    name: aws
+    region: us-west-1
+    stage: production
+    runtime: provided.al2
+package:
+    exclude:
+        - node_modules/**
+        - public/storage
+        - resources/assets/**
+        - storage/**
+        - tests/**
+functions:
+    web:
+        handler: public/index.php
+        timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
+        layers:
+            - ${bref:layer.php-80-fpm}
+        events:
+            -   httpApi: '*'
+    artisan:
+        handler: artisan
+        timeout: 120 # in seconds
+        layers:
+            - ${bref:layer.php-80} # PHP
+            - ${bref:layer.console} # The "console" layer
+plugins:
+    - ./vendor/bref/bref
