@@ -12,6 +12,7 @@ class BookTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
+    /** @test */
     public function guest_cannot_get_books()
     {
         $url = env('APP_URL');
@@ -39,6 +40,24 @@ class BookTest extends TestCase
     }
 
     /** @test */
+    public function create_book_requires_attributes()
+    {
+        //login user
+        $this->actingAs(User::factory()->create());
+        
+        //when attempting to create book with blank attributes
+        $request = $this->post('/books', [
+            'title' => '',
+            'author' => '',
+            'published_on' => '',
+        ]);
+
+        // expect session errors on required attributes and the database is empty
+        $request->assertSessionHasErrors(['title', 'author', 'published_on'], null, 'createBag');
+        $this->assertEmpty(Book::all());
+    }
+
+    /** @test */
     public function user_can_update_book()
     {
         //login user with 1 book
@@ -61,6 +80,26 @@ class BookTest extends TestCase
     }
 
     /** @test */
+    public function update_book_requires_attributes()
+    {
+        //login user with 1 book
+        $user = User::factory()->has(Book::factory())->create();
+        $book = $user->books()->first();
+        $this->actingAs($user);
+        
+        //when attempting to update book with blank attributes
+        $request = $this->put($book->path(), [
+            'title' => '',
+            'author' => '',
+            'published_on' => '',
+        ]);
+
+        // expect session errors on required attributes and database has original attributes
+        $request->assertSessionHasErrors(['title', 'author', 'published_on'], null, 'updateBag');
+        $this->assertDatabaseHas('books', $book->select(['title','author','published_on'])->first()->toArray());
+    }
+
+    /** @test */
     public function user_can_delete_book()
     {
         //login user with a book
@@ -68,13 +107,13 @@ class BookTest extends TestCase
         $book = $user->books()->select(['id','user_id','title','author','published_on'])->first();
         $this->actingAs($user);
 
-        //expect database to have original book
+        //expect database to have original the book
         $this->assertDatabaseHas('books', $book->toArray());
 
-        //when user makes delete request to book
+        //when user makes delete request
         $this->delete($book->path());
 
-        //expect database to be missing book
+        //expect database to be missing the book
         $this->assertDatabaseMissing('books', $book->toArray());
     }
 
@@ -110,7 +149,7 @@ class BookTest extends TestCase
             'sort_order' => $book2->sort_order - 1,
         ]);
 
-        //moving book 1 sort order back down, expect original book sort order
+        //moving book 1 sort order back up, expect original book sort order
         $this->post($book1->path() . '/sort_order/up');
         $this->assertDatabaseHas('books', [
             'title' => $book1->title,
