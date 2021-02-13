@@ -38,9 +38,7 @@ The web application makes use of [laravel jetstream](https://jetstream.laravel.c
 ## Tests
 
 Tests are avilable for the book resource in the test directory
-```sh
-$ ./vessel test
-```
 
 ## Deployment
 
+A demo of this web application is running at [books.andrewbeatrice.com](https://books.andrewbeatrice.com/)
