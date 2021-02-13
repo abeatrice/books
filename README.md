@@ -5,6 +5,37 @@ A user can add, update, or remove books from their list.
 A user can also sort the list of books by column or change the read order.
 A user can also get a list of details for a book by clicking the book on the list (same as updating the book).
 
+A demo of this web application is running at [books.andrewbeatrice.com](https://books.andrewbeatrice.com/)
+
+## Tests
+
+*Note - tests will refresh the database on each run.*
+The tests are configured with the phpunit.xml to use the sqlite database driver in memory. 
+
+## local development
+
+For local development I would recommend either the [vessel](https://vessel.shippingdocker.com/) or the [sail](https://laravel.com/docs/8.x/sail) docker development environments
+
+```sh
+# install source
+$ git clone https://github.com/abeatrice/books.git
+$ cd books
+# create the .env file
+$ cp .env.example .env
+# update .env file for database connection preferences
+# install php dependencies
+$ composer install
+# generate app key
+$ php artisan key:generate
+# migrate the database - create tables and seed with data
+$ php artisan migrate:fresh --seed
+# run tests
+$ php artisan test
+# install js dependencies
+$ npm install && npm run dev
+# visit http://localhost
+```
+
 ## Public Api
 
 The application can be accessed via REST API
@@ -33,12 +64,4 @@ Use the login method to set the collection cookies for session and csrf tokens
 
 ## Web Application
 
-The web application makes use of [laravel jetstream](https://jetstream.laravel.com/2.x/introduction.html) and [inertia](https://inertiajs.com/) for a Modern Monolith Vue front-end SPA
-
-## Tests
-
-Tests are avilable for the book resource in the test directory
-
-## Deployment
-
-A demo of this web application is running at [books.andrewbeatrice.com](https://books.andrewbeatrice.com/)
+The web application makes use of [laravel jetstream](https://jetstream.laravel.com/2.x/introduction.html) and [inertia](https://inertiajs.com/) for a Modern Monolith Vue front-end SPA.
