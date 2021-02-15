@@ -5,16 +5,21 @@
                 <slot></slot>
             </div>
             <div class="flex-none ml-1">
-                <svg v-if="direction == 'ASC'" class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7l4-4m0 0l4 4m-4-4v18"/></svg>
-                <svg v-else-if="direction == 'DESC'" class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 17l-4 4m0 0l-4-4m4 4V3"/></svg>
-                <svg v-else class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
+                <ab-icon v-if="direction == 'ASC'" name="arrow-narrow-up" />
+                <ab-icon v-else-if="direction == 'DESC'" name="arrow-narrow-down" />
+                <ab-icon v-else name="switch-vertical" />
             </div>
         </div>
     </button>
 </template>
 
 <script>
+    import AbIcon from '../Ab/Icon'
+
     export default {
+        components: {
+            AbIcon,
+        },
         props: {
             direction: {
                 type: String,

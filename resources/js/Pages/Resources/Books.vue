@@ -20,24 +20,16 @@
                 <template #tbody>
                     <tr class="bg-white hover:bg-gray-100 cursor-pointer" v-for="(book, i) in books.data" :key="i">
                         <ab-td @click.native="showUpdate(book)">
-                            <ab-edit-button>
-                                {{book.sort_order}}
-                            </ab-edit-button>
+                            <ab-edit-button>{{book.sort_order}}</ab-edit-button>
                         </ab-td>
                         <ab-td @click.native="showUpdate(book)">
-                            <ab-edit-button>
-                                {{book.title}}
-                            </ab-edit-button>
+                            <ab-edit-button>{{book.title}}</ab-edit-button>
                         </ab-td>
                         <ab-td @click.native="showUpdate(book)">
-                            <ab-edit-button>
-                                {{book.author}}
-                            </ab-edit-button>
+                            <ab-edit-button>{{book.author}}</ab-edit-button>
                         </ab-td>                        
                         <ab-td @click.native="showUpdate(book)">
-                            <ab-edit-button>
-                                {{book.published_on}}
-                            </ab-edit-button>
+                            <ab-edit-button>{{book.published_on}}</ab-edit-button>
                         </ab-td>
                         <ab-td class="text-right">
                             <ab-direction-button direction='up' @click.native="changeSortOrder(book, 'up')" />
@@ -201,9 +193,6 @@
                 creating: false,
                 updating: false,
                 deleting: null,
-
-                // sort_on: 'sort_order',
-                // sort_direction: 'DESC',
 
                 createForm: this.$inertia.form({
                     title: '',
