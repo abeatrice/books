@@ -9,13 +9,13 @@
                     Create
                 </jet-button>
             </div>
-            <ab-table>
+            <ab-table class="table-fixed">
                 <template #thead>
-                    <ab-th><ab-sort-button :direction="sort_on == 'sort_order' ? sort_direction : 'unsorted'" @click.native="toggleSort('sort_order')">Read Order</ab-sort-button></ab-th>
-                    <ab-th><ab-sort-button :direction="sort_on == 'title' ? sort_direction : 'unsorted'" @click.native="toggleSort('title')">Title</ab-sort-button></ab-th>
-                    <ab-th><ab-sort-button :direction="sort_on == 'author' ? sort_direction : 'unsorted'" @click.native="toggleSort('author')">Author</ab-sort-button></ab-th>
+                    <ab-th class="w-1/6"><ab-sort-button :direction="sort_on == 'sort_order' ? sort_direction : 'unsorted'" @click.native="toggleSort('sort_order')">Read Order</ab-sort-button></ab-th>
+                    <ab-th class="w-1/3"><ab-sort-button :direction="sort_on == 'title' ? sort_direction : 'unsorted'" @click.native="toggleSort('title')">Title</ab-sort-button></ab-th>
+                    <ab-th class="w-1/4"><ab-sort-button :direction="sort_on == 'author' ? sort_direction : 'unsorted'" @click.native="toggleSort('author')">Author</ab-sort-button></ab-th>
                     <ab-th><ab-sort-button :direction="sort_on == 'published_on' ? sort_direction : 'unsorted'" @click.native="toggleSort('published_on')">Published</ab-sort-button></ab-th>
-                    <ab-th></ab-th>
+                    <ab-th />
                 </template>
                 <template #tbody>
                     <tr class="bg-white hover:bg-gray-100 cursor-pointer" v-for="(book, i) in books.data" :key="i">
